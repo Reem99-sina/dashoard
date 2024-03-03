@@ -17,7 +17,7 @@ export interface stateSide{
   export const StyleSide = createSlice({
     name: "style",
     initialState:{ 
-        miniSidenav: false,
+        miniSidenav: true,
         transparentSidenav: true,
         sidenavColor: "default",
         transparentNavbar: true,
@@ -33,10 +33,18 @@ export interface stateSide{
     reducers: {
         MINI_SIDENAV: (state:stateSide, action:AnyAction) => {
         state.miniSidenav=action.payload;
+        localStorage.setItem("style",JSON.stringify(state))
+
       },
       FOOTER: (state:stateSide,action:AnyAction) => {
-        state={...state,footerDisplay:action.payload.value};
-      },
+        state.footerDisplay=action.payload.value;
+        localStorage.setItem("style",JSON.stringify(state))
+
+      },DIRECTION:(state:stateSide,action:AnyAction)=>{
+        state.direction=action.payload.value;
+        localStorage.setItem("style",JSON.stringify(state))
+
+      }
       
     },
   });

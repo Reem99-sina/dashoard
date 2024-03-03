@@ -1,12 +1,20 @@
 import React from "react";
 
-export interface routeType{
+export interface submenu{
     href: string,
     label: string,
     active: boolean,
     permissions: string[],
     component: React.ReactNode,
-    submenu: any[],
+
+}
+export interface routeType{
+    href: string,
+    label: string,
+    active: boolean,
+    permissions: string[],
+    component?: React.ReactNode,
+    submenu: submenu[],
     icon: React.ReactNode,
     noCollapse: boolean,
 }

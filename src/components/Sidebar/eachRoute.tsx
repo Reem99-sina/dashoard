@@ -3,20 +3,28 @@ import { routeType } from "../../types/routeType"
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { useSelector } from "react-redux";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react"
 function EachRoute({ data }: { data: routeType }) {
+    const navigate = useNavigate()
     const { miniSidenav } = useSelector((state: any) => state.style) //chama o
     const [anchorEl, setAnchorEl] = React.useState<null | any>(null);
     const [open, setOpen] = React.useState(false)
     const handleClick = (event: React.MouseEvent<any>) => { setAnchorEl(event.currentTarget); setOpen(true) };
     const handleClose = () => { setAnchorEl(null); setOpen(false) }
+
     return (
         <>
             <Box sx={{ display: "flex", my: 2, justifyContent: miniSidenav ? "center" : "flex-start" }}>
                 <Box id="demo-positioned-button" onMouseEnter={handleClick} sx={{
                     cursor: "pointer"
                 }}>
-                    <Icon fontSize="medium" color="inherit" sx={{ mx: 2 }} >
+
+                    <Icon fontSize="medium" sx={{
+                        mx: 2, color: data?.active ? "white" : "black",
+                        backgroundColor: data?.active ? "#8ecfd2" : "transparent",
+                        padding: "5px", borderRadius: "10px"
+                    }} onClick={() => navigate(data?.href)} >
                         {data?.icon ? data?.icon : <AccountBalanceIcon />}
                     </Icon>
                 </Box>
@@ -37,21 +45,28 @@ function EachRoute({ data }: { data: routeType }) {
                                 horizontal: 'left',
                             }}
                         >
-                            {data.submenu.length > 0 ? data.submenu.map((menuOne) => {
+                            {data?.submenu?.length > 0 ? data?.submenu?.map((menuOne) => {
 
                                 return <MenuItem onClick={handleClose} sx={{ cursor: "pointer" }}>
-
-                                    Profile
+                                    <Link to={menuOne?.href} style={{ textDecoration: "none", color: "black" }}>
+                                        {menuOne?.label}
+                                    </Link>
                                 </MenuItem>
                             }) : <MenuItem onClick={handleClose}><Typography sx={{ cursor: "pointer" }}>{data?.label}</Typography></MenuItem>}
 
                         </Menu>
-                    </> : data.submenu.length > 0&&!miniSidenav ? <Accordion sx={{ "&.MuiPaper-root": { backgroundColor: "unset", boxShadow: "unset" } }}>
+                    </> : data.submenu.length > 0 && !miniSidenav ? <Accordion sx={{ "&.MuiPaper-root": { backgroundColor: "unset", boxShadow: "unset" } }}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1-content"
                             id="panel1-header"
-                            sx={{ ".MuiAccordionSummary-content": { margin: "unset" }, minHeight: "unset", padding: "unset", "&.MuiAccordionSummary-root.Mui-expanded": { minHeight: "unset" } }}
+                            sx={{
+                                ".MuiAccordionSummary-content": { margin: "unset" },
+                                ".MuiAccordionSummary-content.Mui-expanded": { margin: "unset" },
+                                minHeight: "unset",
+                                padding: "unset",
+                                ".MuiAccordionSummary-root.Mui-expanded": { margin: "unset" }, "&.MuiAccordionSummary-root.Mui-expanded": { minHeight: "unset" }
+                            }}
                         >
                             {data?.label}
                         </AccordionSummary>
@@ -60,18 +75,22 @@ function EachRoute({ data }: { data: routeType }) {
                                 {data.submenu.map((menuOne) => {
                                     return (
                                         <ListItem disablePadding>
-                                        <ListItemButton>
-    
-                                            <ListItemText primary="Profile" sx={{ fontSize: "14px" }} />
-                                        </ListItemButton>
-                                    </ListItem>
+                                            <ListItemButton sx={{
+                                                backgroundColor: menuOne.active ? "#8ecfd2" : "transparent",
+                                                borderRadius: "10px"
+                                            }}>
+                                                <Link to={menuOne?.href} style={{ textDecoration: "none", color: "black", fontSize: "14px" }}>
+                                                    <ListItemText primary={menuOne?.label} sx={{ fontSize: "14px", color: menuOne.active ? "white" : "black" }} />
+                                                </Link>
+                                            </ListItemButton>
+                                        </ListItem>
                                     )
                                 })}
-                               
+
 
                             </List>
                         </AccordionDetails>
-                    </Accordion> : <Typography sx={{ display: miniSidenav ? "none" : "block", cursor: "pointer" }}>{data?.label}</Typography>}
+                    </Accordion> : <Typography sx={{ display: miniSidenav ? "none" : "block", cursor: "pointer" }}><Link to={data?.href} style={{ textDecoration: "none", color: "black" }}>{data?.label}</Link></Typography>}
                 </Box>
             </Box>
         </>

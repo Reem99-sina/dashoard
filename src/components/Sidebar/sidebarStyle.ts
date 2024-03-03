@@ -8,13 +8,12 @@ interface StyleProps { // Adjust the type of theme as needed
 export default styled(Box)<StyleProps>(({ theme,ownState}) => {
     
     return {
-    
       border: "none",
       direction:theme.direction,
       width:ownState?.miniSidenav?"100px":"250px",
       backgroundColor:"#cdf3f5",
       transition:"all 0.5s",
-      height:"100vh"
-        
+      height:"100vh",
+      position:"fixed"      
     }
 })
